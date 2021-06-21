@@ -1,0 +1,138 @@
+---
+title: "Seminararbeit CHedaaaaar"
+author: "Philip Tschopp-Reich"
+date: "6/21/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, warning=FALSE, message=FALSE}
+library(ggplot2)
+library(dplyr)
+library(scales)
+```
+
+## Replikation der Figur 7. Changes in Employment by Wage Quartile
+
+```{r, warning=FALSE}
+emp_df <- read.csv("Employment - National - Daily.csv")
+
+emp_df$date <- as.Date(with(emp_df, paste(year, month, day,sep="-")), "%Y-%m-%d")
+
+emp_df <- emp_df %>%
+  filter(date <= "2020-10-15")
+
+ggplot() +
+  geom_line(data=filter(emp_df, date < "2020-09-15"),
+            aes(x=date, y=emp_combined_inclow, colour="emp_combined_inclow"),
+            size=1.1) +
+  geom_line(data=filter(emp_df, date >= "2020-09-15"),
+            aes(x=date, y=emp_combined_inclow, colour="emp_combined_inclow"),
+            linetype="dashed", size=1.1) +
+  geom_line(data=filter(emp_df, date < "2020-09-15"),
+            aes(x=date, y=emp_combined_incq2, colour="emp_combined_incq2"),
+            size=1.1) +
+  geom_line(data=filter(emp_df, date >= "2020-09-15"),
+            aes(x=date, y=emp_combined_incq2, colour="emp_combined_incq2"),
+            linetype="dashed", size=1.1) +
+  geom_line(data=filter(emp_df, date < "2020-09-15"),
+            aes(x=date, y=emp_combined_incq3, colour="emp_combined_incq3"),
+            size=1.1) +
+  geom_line(data=filter(emp_df, date >= "2020-09-15"),
+            aes(x=date, y=emp_combined_incq3, colour="emp_combined_incq3"),
+            linetype="dashed", size=1.1) +
+  geom_line(data=filter(emp_df, date < "2020-09-15"),
+            aes(x=date, y=emp_combined_inchigh, colour="emp_combined_inchigh"),
+            size=1.1) +
+  geom_line(data=filter(emp_df, date >= "2020-09-15"),
+            aes(x=date, y=emp_combined_inchigh, colour="emp_combined_inchigh"),
+            linetype="dashed", size=1.1) +
+  geom_vline(xintercept = as.numeric(as.Date("2020-04-15")),
+             linetype="dashed") +
+  geom_vline(xintercept = as.numeric(as.Date("2020-09-15")),
+             linetype="dashed") +
+  geom_vline(xintercept = as.numeric(as.Date("2020-10-14")),
+             linetype="dashed") +
+  scale_x_date(date_labels = "%b-%d",
+               date_breaks = "1 month") +
+  scale_y_continuous(labels = percent) +
+  xlab("") +
+  ylab("Change in Employment (%) \n Relative to January 2020") +
+  labs(title = "Changes in Employment by Wage Quartile") +
+  scale_color_manual(name = "Wage Quartiles",
+                     values = c("emp_combined_inclow" = "purple", 
+                                "emp_combined_incq2" = "orange",
+                                "emp_combined_incq3" = "darkblue",
+                                "emp_combined_inchigh" = "turquoise"),
+                     labels = c("Top Wage Quartile (>$29)",
+                                "Bottom Wage Quartile (<$13)",
+                                "Second Quartile ($13-18)",
+                                "Third Quartile ($18-29)"
+                                )) +
+  theme(legend.position = c(0.1, 0.2)) +
+  annotate("text", x=as.Date("2020-04-25"), y=-0.06,
+           label= "-14% \n (4.4m \n jobs lost)",
+           color="turquoise", 
+           size=3) +
+  annotate("text", x=as.Date("2020-04-25"), y=-0.14,
+           label= "-20% \n (6.3m)",
+           color="darkblue",
+           size=3) +
+  annotate("text", x=as.Date("2020-04-25"), y=-0.22,
+           label= "-27% \n (8.6m)",
+           color="orange",
+           size=3) +
+  annotate("text", x=as.Date("2020-04-25"), y=-0.33,
+           label= "-37% \n (11.8m)",
+           color="purple",
+           size=3) +
+  annotate("text", x=as.Date("2020-09-22"), y=0.03,
+           label= "0% \n (0.1m)",
+           color="turquoise",
+           size=3) +
+  annotate("text", x=as.Date("2020-09-22"), y=-0.035,
+           label= "-3% \n (1m)",
+           color="darkblue",
+           size=3) +
+  annotate("text", x=as.Date("2020-09-22"), y=-0.07,
+           label= "-8% \n (2.6m)",
+           color="orange",
+           size=3) +
+  annotate("text", x=as.Date("2020-09-22"), y=-0.15,
+           label= "-20% \n (6.3m)",
+           color="purple",
+           size=3) +
+  annotate("text", x=as.Date("2020-10-15"), y=0.03,
+           label= "0% \n (0.1m)",
+           color="turquoise",
+           size=3) +
+  annotate("text", x=as.Date("2020-10-15"), y=-0.01,
+           label= "-2% \n (0.5m)",
+           color="darkblue",
+           size=3) +
+  annotate("text", x=as.Date("2020-10-15"), y=-0.045,
+           label= "-8% \n (2.4m)",
+           color="orange",
+           size=3) +
+  annotate("text", x=as.Date("2020-10-15"), y=-0.17,
+           label= "-20% \n (6.3m)",
+           color="purple",
+           size=3) +
+  annotate("text", x=as.Date("2020-04-03"), y=0.07,
+           label= "Apr 15",
+           color="black",
+           size=3) +
+  annotate("text", x=as.Date("2020-09-03"), y=0.07,
+           label= "Sep 15",
+           color="black",
+           size=3) +
+  annotate("text", x=as.Date("2020-10-02"), y=0.07,
+           label= "Oct 14",
+           color="black",
+           size=3)
+```
+
+
