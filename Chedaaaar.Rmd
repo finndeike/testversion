@@ -18,36 +18,36 @@ library(scales)
 ## Replikation der Figur 7. Changes in Employment by Wage Quartile
 
 ```{r, warning=FALSE}
-emp_df <- read.csv("Employment - National - Daily.csv")
+df <- read.csv("Employment - National - Daily.csv")
 
-emp_df$date <- as.Date(with(emp_df, paste(year, month, day,sep="-")), "%Y-%m-%d")
+df$date <- as.Date(with(df, paste(year, month, day,sep="-")), "%Y-%m-%d")
 
-emp_df <- emp_df %>%
-  filter(date <= "2020-10-15")
+emp_df <- df %>%
+  filter(date <= "2020-11-15")
 
 ggplot() +
   geom_line(data=filter(emp_df, date < "2020-09-15"),
             aes(x=date, y=emp_combined_inclow, colour="emp_combined_inclow"),
             size=1.1) +
-  geom_line(data=filter(emp_df, date >= "2020-09-15"),
+  geom_line(data=filter(emp_df, (date >= "2020-09-15") & (date < "2020-10-14")),
             aes(x=date, y=emp_combined_inclow, colour="emp_combined_inclow"),
             linetype="dashed", size=1.1) +
   geom_line(data=filter(emp_df, date < "2020-09-15"),
             aes(x=date, y=emp_combined_incq2, colour="emp_combined_incq2"),
             size=1.1) +
-  geom_line(data=filter(emp_df, date >= "2020-09-15"),
+  geom_line(data=filter(emp_df, (date >= "2020-09-15") & (date < "2020-10-14")),
             aes(x=date, y=emp_combined_incq2, colour="emp_combined_incq2"),
             linetype="dashed", size=1.1) +
   geom_line(data=filter(emp_df, date < "2020-09-15"),
             aes(x=date, y=emp_combined_incq3, colour="emp_combined_incq3"),
             size=1.1) +
-  geom_line(data=filter(emp_df, date >= "2020-09-15"),
+  geom_line(data=filter(emp_df, (date >= "2020-09-15") & (date < "2020-10-14")),
             aes(x=date, y=emp_combined_incq3, colour="emp_combined_incq3"),
             linetype="dashed", size=1.1) +
   geom_line(data=filter(emp_df, date < "2020-09-15"),
             aes(x=date, y=emp_combined_inchigh, colour="emp_combined_inchigh"),
             size=1.1) +
-  geom_line(data=filter(emp_df, date >= "2020-09-15"),
+  geom_line(data=filter(emp_df, (date >= "2020-09-15") & (date < "2020-10-14")),
             aes(x=date, y=emp_combined_inchigh, colour="emp_combined_inchigh"),
             linetype="dashed", size=1.1) +
   geom_vline(xintercept = as.numeric(as.Date("2020-04-15")),
@@ -72,7 +72,9 @@ ggplot() +
                                 "Second Quartile ($13-18)",
                                 "Third Quartile ($18-29)"
                                 )) +
-  theme(legend.position = c(0.1, 0.2)) +
+  theme(legend.position = c(0.15, 0.2),
+        legend.title = element_text(size=7),
+        legend.text = element_text(size=7)) +
   annotate("text", x=as.Date("2020-04-25"), y=-0.06,
            label= "-14% \n (4.4m \n jobs lost)",
            color="turquoise", 
@@ -105,19 +107,19 @@ ggplot() +
            label= "-20% \n (6.3m)",
            color="purple",
            size=3) +
-  annotate("text", x=as.Date("2020-10-15"), y=0.03,
+  annotate("text", x=as.Date("2020-10-25"), y=0.03,
            label= "0% \n (0.1m)",
            color="turquoise",
            size=3) +
-  annotate("text", x=as.Date("2020-10-15"), y=-0.01,
+  annotate("text", x=as.Date("2020-10-25"), y=-0.01,
            label= "-2% \n (0.5m)",
            color="darkblue",
            size=3) +
-  annotate("text", x=as.Date("2020-10-15"), y=-0.045,
+  annotate("text", x=as.Date("2020-10-25"), y=-0.045,
            label= "-8% \n (2.4m)",
            color="orange",
            size=3) +
-  annotate("text", x=as.Date("2020-10-15"), y=-0.17,
+  annotate("text", x=as.Date("2020-10-25"), y=-0.17,
            label= "-20% \n (6.3m)",
            color="purple",
            size=3) +
